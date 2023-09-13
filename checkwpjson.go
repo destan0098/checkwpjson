@@ -45,6 +45,7 @@ func main() {
 		fmt.Println("-i : To Input File Address")
 		fmt.Println("-o : To OutPut File Address")
 	}
+
 	fo, err := os.OpenFile(*output, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 
@@ -72,6 +73,7 @@ func main() {
 
 	for InputBuf.Scan() {
 		InputText := InputBuf.Text()
+
 		path := fmt.Sprintf(InputText+"/%s", "wp-json/wp/v2/users")
 		req, _ := http.NewRequest("GET", path, nil)
 		resp, erer := client.Do(req)
