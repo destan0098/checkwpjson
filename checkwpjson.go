@@ -98,7 +98,7 @@ func main() {
 				continue
 			}
 			err = json.Unmarshal(body, &authors)
-			//Parse Json Values
+			//Parse Json Values To Show
 			if err != nil {
 				fmt.Println(color.Colorize(color.Red, "[-] Line 91 Error:"+err.Error()))
 				continue
