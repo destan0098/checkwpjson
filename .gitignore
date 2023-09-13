@@ -1,4 +1,6 @@
 .idea/workspace.xml
 /.gitignore
 .idea
-.idea/*
+.idea/.gitignore
+.idea/checkpointwpjson.iml
+.idea/modules.xml
