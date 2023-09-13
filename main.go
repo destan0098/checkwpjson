@@ -4,11 +4,13 @@ import (
 	"bufio"
 	"crypto/tls"
 	"encoding/json"
+	"flag"
 	"fmt"
-	"github.com/TwiN/go-color"
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"github.com/TwiN/go-color"
 )
 
 type Author struct {
@@ -31,16 +33,15 @@ type Author struct {
 var authors []Author
 var outlast []string
 
-//func errormanager(err error) {
-//	fmt.Println("[-] " + err.Error())
-//
-//}
-
 var fo *os.File
 
 func main() {
+	input := flag.String("input", "input.txt", "Input List")
+	output := flag.String("output", "output.txt", "Output List")
+	help := flag.Bool("h", false, "Show help")
+	flag.Parse()
 
-	fo, err := os.OpenFile("out.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
+	fo, err := os.OpenFile(*output, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 
 		fmt.Println(color.Colorize(color.Red, "[-] Line 46 Error:"+err.Error()))
@@ -56,18 +57,18 @@ func main() {
 			return http.ErrUseLastResponse
 		}}
 
-	Payloadfile := "checkpointvalid.txt"
-	Payload, err := os.Open(Payloadfile)
+	InputFile := *input
+	InputWebs, err := os.Open(InputFile)
 	if err != nil {
 		fmt.Println(color.Colorize(color.Red, "[-] Line 62 Error:"+err.Error()))
 		recover()
 	}
-	PayloadBuf := bufio.NewScanner(Payload)
-	PayloadBuf.Split(bufio.ScanLines)
+	InputBuf := bufio.NewScanner(InputWebs)
+	InputBuf.Split(bufio.ScanLines)
 
-	for PayloadBuf.Scan() {
-		Payl := PayloadBuf.Text()
-		path := fmt.Sprintf(Payl+"/%s", "wp-json/wp/v2/users")
+	for InputBuf.Scan() {
+		InputText := InputBuf.Text()
+		path := fmt.Sprintf(InputText+"/%s", "wp-json/wp/v2/users")
 		req, _ := http.NewRequest("GET", path, nil)
 		resp, erer := client.Do(req)
 
