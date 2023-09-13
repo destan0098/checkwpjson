@@ -36,15 +36,19 @@ var outlast []string
 var fo *os.File
 
 func main() {
-	input := flag.String("input", "input.txt", "Input List")
-	output := flag.String("output", "output.txt", "Output List")
+	input := flag.String("i", "input.txt", "Input List")
+	output := flag.String("o", "output.txt", "Output List")
 	help := flag.Bool("h", false, "Show help")
 	flag.Parse()
-
+	if *help {
+		fmt.Println("-h : To Show Help")
+		fmt.Println("-i : To Input File Address")
+		fmt.Println("-o : To OutPut File Address")
+	}
 	fo, err := os.OpenFile(*output, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 
-		fmt.Println(color.Colorize(color.Red, "[-] Line 46 Error:"+err.Error()))
+		fmt.Println(color.Colorize(color.Red, "[-] Line 51 Error:"+err.Error()))
 		fmt.Println(color.Colorize(color.Red, "[-] Error In Permission To Open File"))
 	}
 	tr := &http.Transport{
@@ -60,7 +64,7 @@ func main() {
 	InputFile := *input
 	InputWebs, err := os.Open(InputFile)
 	if err != nil {
-		fmt.Println(color.Colorize(color.Red, "[-] Line 62 Error:"+err.Error()))
+		fmt.Println(color.Colorize(color.Red, "[-] Line 67 Error:"+err.Error()))
 		recover()
 	}
 	InputBuf := bufio.NewScanner(InputWebs)
@@ -73,18 +77,18 @@ func main() {
 		resp, erer := client.Do(req)
 
 		if erer != nil {
-			fmt.Println(color.Colorize(color.Red, "[-] Line 75 Error:"+erer.Error()))
+			fmt.Println(color.Colorize(color.Red, "[-] Line 80 Error:"+erer.Error()))
 			continue
 		}
 		if resp.StatusCode == 200 {
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				fmt.Println(color.Colorize(color.Red, "[-] Line 81 Error:"+err.Error()))
+				fmt.Println(color.Colorize(color.Red, "[-] Line 86 Error:"+err.Error()))
 				continue
 			}
 			err = json.Unmarshal(body, &authors)
 			if err != nil {
-				fmt.Println(color.Colorize(color.Red, "[-] Line 86 Error:"+err.Error()))
+				fmt.Println(color.Colorize(color.Red, "[-] Line 91 Error:"+err.Error()))
 				continue
 			}
 			fmt.Println(color.Colorize(color.Green, "[+] Find In : "+path))
