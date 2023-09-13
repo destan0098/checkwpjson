@@ -1,4 +1,4 @@
-module checkpointwpjson
+module github.com/destan0098/checkwpjson
 
 go 1.20
 
