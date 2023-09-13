@@ -49,7 +49,7 @@ func main() {
 	fo, err := os.OpenFile(*output, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 
-		fmt.Println(color.Colorize(color.Red, "[-] Line 51 Error:"+err.Error()))
+		fmt.Println(color.Colorize(color.Red, "[-]  Error:"+err.Error()))
 		fmt.Println(color.Colorize(color.Red, "[-] Error In Permission To Open File"))
 	}
 	tr := &http.Transport{
@@ -65,7 +65,7 @@ func main() {
 	InputFile := *input
 	InputWebs, err := os.Open(InputFile)
 	if err != nil {
-		fmt.Println(color.Colorize(color.Red, "[-] Line 67 Error:"+err.Error()))
+		fmt.Println(color.Colorize(color.Red, "[-]  Error:"+err.Error()))
 		recover()
 	}
 	InputBuf := bufio.NewScanner(InputWebs)
@@ -79,13 +79,13 @@ func main() {
 		resp, erer := client.Do(req)
 
 		if erer != nil {
-			fmt.Println(color.Colorize(color.Red, "[-] Line 80 Error:"+erer.Error()))
+			fmt.Println(color.Colorize(color.Red, "[-]  Error:"+erer.Error()))
 			continue
 		}
 		if resp.StatusCode == 200 {
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				fmt.Println(color.Colorize(color.Red, "[-] Line 86 Error:"+err.Error()))
+				fmt.Println(color.Colorize(color.Red, "[-]  Error:"+err.Error()))
 				continue
 			}
 			err = json.Unmarshal(body, &authors)
