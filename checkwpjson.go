@@ -112,6 +112,7 @@ func main() {
 			outlast = append(outlast, "********************************************\n")
 
 			_, err = fmt.Fprint(fo, outlast)
+			//Save In output File
 			if err != nil {
 				fmt.Println(color.Colorize(color.Red, "[-] Line 100 Error:"+err.Error()))
 				continue
