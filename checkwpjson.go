@@ -81,6 +81,7 @@ func main() {
 		//It puts the values of the file line by line into the variable.
 		path := fmt.Sprintf(InputText+"/%s", "wp-json/wp/v2/users")
 		// Add WP-json Directory To your Address
+
 		req, _ := http.NewRequest("GET", path, nil)
 		//Send Request To Address
 		resp, erer := client.Do(req)
