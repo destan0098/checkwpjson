@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/TwiN/go-color"
 )
@@ -32,8 +33,9 @@ type Author struct {
 
 var authors []Author
 var outlast []string
-
+var path string
 var fo *os.File
+var fo2 *os.File
 
 func main() {
 	//Receive input from the user.
@@ -78,10 +80,13 @@ func main() {
 	for InputBuf.Scan() {
 		//Check End Of File Or not
 		InputText := InputBuf.Text()
-		//It puts the values of the file line by line into the variable.
-		path := fmt.Sprintf(InputText+"/%s", "wp-json/wp/v2/users")
-		// Add WP-json Directory To your Address
-
+		if !strings.HasSuffix(InputText, "/") {
+			//It puts the values of the file line by line into the variable.
+			path = fmt.Sprintf(InputText+"/%s", "wp-json/wp/v2/users")
+			// Add WP-json Directory To your Address
+		} else {
+			path = fmt.Sprintf(InputText+"%s", "/wp-json/wp/v2/users")
+		}
 		req, _ := http.NewRequest("GET", path, nil)
 		//Send Request To Address
 		resp, erer := client.Do(req)
@@ -117,6 +122,53 @@ func main() {
 			if err != nil {
 				fmt.Println(color.Colorize(color.Red, "[-] Line 100 Error:"+err.Error()))
 				continue
+			}
+		} else {
+			if !strings.HasSuffix(InputText, "/") {
+				//It puts the values of the file line by line into the variable.
+				path = fmt.Sprintf(InputText+"/%s", "?rest_route=/wp/v2/users/")
+				// Add WP-json Directory To your Address
+			} else {
+				path = fmt.Sprintf(InputText+"%s", "/?rest_route=/wp/v2/users/")
+			}
+			reqs, _ := http.NewRequest("GET", path, nil)
+			//Send Request To Address
+			resps, erers := client.Do(reqs)
+
+			if erers != nil {
+				fmt.Println(color.Colorize(color.Red, "[-]  Error:"+erer.Error()))
+				continue
+			}
+			if resps.StatusCode == 200 {
+				//Check Response status Code
+				body, errs := ioutil.ReadAll(resps.Body)
+				if errs != nil {
+					fmt.Println(color.Colorize(color.Red, "[-]  Error:"+err.Error()))
+					continue
+				}
+				err = json.Unmarshal(body, &authors)
+				//Parse Json Values To Show
+				if err != nil {
+					fmt.Println(color.Colorize(color.Red, "[-] Line 91 Error:"+err.Error()))
+					continue
+				}
+				fmt.Println(color.Colorize(color.Green, "[+] Find In : "+path))
+				outlast = append(outlast, path+"\n")
+				for _, author := range authors {
+					outlast = append(outlast, " User Name :\n"+author.Slug+"\n")
+					fmt.Println(color.Colorize(color.Green, "[+] UserNames : "+author.Slug))
+
+				}
+				outlast = append(outlast, "********************************************\n")
+
+				_, err = fmt.Fprint(fo, outlast)
+				//Save In output File
+				if err != nil {
+					fmt.Println(color.Colorize(color.Red, "[-] Line 100 Error:"+err.Error()))
+					continue
+				}
+			} else {
+				fmt.Println(color.Colorize(color.Red, "[-] Not Find any users"))
 			}
 		}
 	}
