@@ -7,7 +7,6 @@ import (
 	"github.com/TwiN/go-color"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -33,7 +32,7 @@ var authors []Author
 var err error
 var path string
 
-func Part2(fo *os.File, InputText string) {
+func Part2(InputText string) ([]string, string) {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -76,22 +75,17 @@ func Part2(fo *os.File, InputText string) {
 			recover()
 		}
 		fmt.Println(color.Colorize(color.Green, "[+] Find In : "+path))
-		outlast = append(outlast, path+"\n")
+
 		for _, author := range authors {
-			outlast = append(outlast, " User Name :\n"+author.Slug+"\n")
+			outlast = append(outlast, author.Slug)
 			fmt.Println(color.Colorize(color.Green, "[+] UserNames : "+author.Slug))
 
 		}
-		outlast = append(outlast, "********************************************\n")
+		return outlast, InputText
 
-		_, err = fmt.Fprint(fo, outlast)
-		//Save In output File
-		if err != nil {
-			fmt.Println(color.Colorize(color.Red, "[-] Line 100 Error:"+err.Error()))
-			recover()
-		}
 	} else {
 		fmt.Println(color.Colorize(color.Red, "[-] Not Find any users"))
 
 	}
+	return nil, ""
 }

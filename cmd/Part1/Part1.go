@@ -5,10 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/TwiN/go-color"
-	"github.com/destan0098/checkwpjson/cmd/Part2"
 	"io/ioutil"
 	"net/http"
-	"os"
+	"strings"
 )
 
 type Author struct {
@@ -31,9 +30,10 @@ type Author struct {
 var outlast []string
 var authors []Author
 var err error
+var path string
 
-func Part1(path string, fo *os.File, InputText string) {
-	fmt.Println(path)
+func Part1(domains string) ([]string, string) {
+	fmt.Println(domains)
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
@@ -43,7 +43,17 @@ func Part1(path string, fo *os.File, InputText string) {
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		}}
+	if !strings.HasSuffix(domains, "/") {
 
+		//It puts the values of the file line by line into the variable.
+		path = fmt.Sprintf(domains+"/%s", "wp-json/wp/v2/users")
+
+		// Add WP-json Directory To your Address
+	} else {
+
+		path = fmt.Sprintf(domains+"%s", "wp-json/wp/v2/users")
+
+	}
 	req, _ := http.NewRequest("GET", path, nil)
 	//Send Request To Address
 	resp, erer := client.Do(req)
@@ -62,25 +72,23 @@ func Part1(path string, fo *os.File, InputText string) {
 		err = json.Unmarshal(body, &authors)
 		//Parse Json Values To Show
 		if err != nil {
-			fmt.Println(color.Colorize(color.Red, "[-] Line 91 Error:"+err.Error()))
+			fmt.Println(color.Colorize(color.Red, "[-] Line 77 Error:"+err.Error()))
 			recover()
 		}
 		fmt.Println(color.Colorize(color.Green, "[+] Find In : "+path))
-		outlast = append(outlast, path+"\n")
+
 		for _, author := range authors {
-			outlast = append(outlast, " User Name :\n"+author.Slug+"\n")
+			outlast = append(outlast, author.Slug)
 			fmt.Println(color.Colorize(color.Green, "[+] UserNames : "+author.Slug))
 
 		}
-		outlast = append(outlast, "********************************************\n")
 
-		_, err = fmt.Fprint(fo, outlast)
+		return outlast, domains
 		//Save In output File
-		if err != nil {
-			fmt.Println(color.Colorize(color.Red, "[-] Line 100 Error:"+err.Error()))
-			recover()
-		}
+
 	} else {
-		Part2.Part2(fo, InputText)
+		return nil, ""
+
 	}
+
 }
