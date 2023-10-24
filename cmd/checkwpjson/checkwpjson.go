@@ -113,16 +113,31 @@ func withlist(inputfile string) []DomainResult {
 	return results
 }
 func withname(domain string) []DomainResult {
-
+	var result DomainResult
+	var results []DomainResult
 	users, dAdress := Part1.Part1(domain)
 
 	if users == nil || dAdress == "" {
 		users, dAdress = Part2.Part2(domains)
 	}
-	result := DomainResult{
-		Domain:   dAdress,
-		UserName: users[0],
+	for _, user := range users {
+
+		if users == nil || dAdress == "" {
+
+			result = DomainResult{
+				Domain:   domains,
+				UserName: "NotFind",
+			}
+			results = append(results, result)
+			return results
+
+		}
+		result = DomainResult{
+			Domain:   dAdress,
+			UserName: user,
+		}
 	}
+
 	results = append(results, result)
 
 	// If port 80 or 443 is open, print a message and store the result.

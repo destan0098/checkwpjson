@@ -54,6 +54,7 @@ func Part1(domains string) ([]string, string) {
 		path = fmt.Sprintf(domains+"%s", "wp-json/wp/v2/users")
 
 	}
+	fmt.Println(path)
 	req, _ := http.NewRequest("GET", path, nil)
 	//Send Request To Address
 	resp, erer := client.Do(req)
@@ -79,6 +80,7 @@ func Part1(domains string) ([]string, string) {
 
 		for _, author := range authors {
 			outlast = append(outlast, author.Slug)
+
 			fmt.Println(color.Colorize(color.Green, "[+] UserNames : "+author.Slug))
 
 		}
