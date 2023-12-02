@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/TwiN/go-color"
+
 	"io/ioutil"
 	"net/http"
 	"strings"
