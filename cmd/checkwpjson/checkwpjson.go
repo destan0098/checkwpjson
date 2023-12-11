@@ -16,7 +16,7 @@ import (
 
 var path string
 
-var outputs, inputs, domains string = "", "", ""
+var outputs, inputs, domains string
 
 var pipel int
 var results []DomainResult
