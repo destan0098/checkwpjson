@@ -93,7 +93,7 @@ func readDomains(filename string) []string {
 
 func withlist(inputfile string) []DomainResult {
 	domainadd := readDomains(inputfile)
-	var results []DomainResult
+
 	var result DomainResult
 	for _, domain := range domainadd {
 
