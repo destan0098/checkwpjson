@@ -75,7 +75,7 @@ func Part2(InputText string) ([]string, string) {
 			fmt.Println(color.Colorize(color.Red, "[-] Line 91 Error:"+err.Error()))
 			recover()
 		}
-		fmt.Println(color.Colorize(color.Green, "[+] Find In : "+path))
+		fmt.Println(color.Colorize(color.Green, "[+] Found In : "+path))
 
 		for _, author := range authors {
 			outlast = append(outlast, author.Slug)
